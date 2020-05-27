@@ -1,0 +1,3 @@
+/root/Desktop/Nanodegree-System-Monitor/build/CMakeFiles/rebuild_cache.dir
+/root/Desktop/Nanodegree-System-Monitor/build/CMakeFiles/monitor.dir
+/root/Desktop/Nanodegree-System-Monitor/build/CMakeFiles/edit_cache.dir

@@ -35,13 +35,13 @@ string LinuxParser::OperatingSystem() {
 
 // DONE: An example of how to read data from the filesystem
 string LinuxParser::Kernel() {
-  string os, kernel;
+  string os, version, kernel;
   string line;
   std::ifstream stream(kProcDirectory + kVersionFilename);
   if (stream.is_open()) {
     std::getline(stream, line);
     std::istringstream linestream(line);
-    linestream >> os >> kernel;
+    linestream >> os >> version >> kernel;
   }
   return kernel;
 }
@@ -67,10 +67,54 @@ vector<int> LinuxParser::Pids() {
 }
 
 // TODO: Read and return the system memory utilization
-float LinuxParser::MemoryUtilization() { return 0.0; }
+float LinuxParser::MemoryUtilization() { 
+  float mem_total, mem_free, mem_cached, mem_sh, buffers, s_reclaim;
+  string line;
+  std::ifstream stream(kProcDirectory + kMeminfoFilename);
+
+  if (stream.is_open()) {
+    while (std::getline(stream, line)) {
+      string key, value;
+      std::replace(line.begin(), line.end(), ':', ' ');
+      std::istringstream linestream(line);
+      linestream >> key >> value;
+
+      if (key == "MemTotal") {
+        mem_total = stof(value);
+      } else if (key == "MemFree") {
+        mem_free = stof(value);
+      } else if (key == "Buffers") {
+        buffers = stof(value);
+      } else if (key == "Cached") {
+        mem_cached = stof(value);
+      } else if (key == "Shmem") {
+        mem_sh = stof(value);
+      } else if (key == "SReclaimable") {
+        s_reclaim = stof(value);
+        break;
+      }
+    }
+  }
+
+  float total_memory_usage = mem_total - mem_free;
+  float cached_memory = mem_cached + s_reclaim - mem_sh;
+
+  return (total_memory_usage - (buffers + cached_memory)) / mem_total; 
+}
 
 // TODO: Read and return the system uptime
-long LinuxParser::UpTime() { return 0; }
+long LinuxParser::UpTime() { 
+  string sys_uptime, idle_uptime;
+
+  string line;
+  std::ifstream stream(kProcDirectory + kUptimeFilename);
+  if (stream.is_open()) {
+    std::getline(stream, line);
+    std::istringstream linestream(line);
+    linestream >> sys_uptime >> idle_uptime;
+  }
+  return std::stol(sys_uptime) + std::stol(idle_uptime); 
+}
 
 // TODO: Read and return the number of jiffies for the system
 long LinuxParser::Jiffies() { return 0; }
@@ -86,7 +130,17 @@ long LinuxParser::ActiveJiffies() { return 0; }
 long LinuxParser::IdleJiffies() { return 0; }
 
 // TODO: Read and return CPU utilization
-vector<string> LinuxParser::CpuUtilization() { return {}; }
+vector<string> LinuxParser::CpuUtilization() { 
+  vector<string> cpu_stats;
+  string line, value;
+  std::ifstream stream(kProcDirectory + kCpuinfoFilename);
+  if (stream.is_open()) {
+    std::getline(stream, line);
+    std::istringstream linestream(line);
+    while (linestream >> value) cpu_stats.push_back(value); 
+  }
+  return cpu_stats;
+}
 
 // TODO: Read and return the total number of processes
 int LinuxParser::TotalProcesses() { return 0; }
