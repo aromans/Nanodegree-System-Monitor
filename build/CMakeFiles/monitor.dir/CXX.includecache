@@ -6,6 +6,14 @@
 
 #IncludeRegexTransform: 
 
+../include/linux_parser.h
+fstream
+-
+regex
+-
+string
+-
+
 ../include/process.h
 string
 -
@@ -22,15 +30,23 @@ process.h
 processor.h
 ../include/processor.h
 
-/root/Desktop/Nanodegree-System-Monitor/src/processor.cpp
+/root/Desktop/Nanodegree-System-Monitor/src/system.cpp
+unistd.h
+-
+cstddef
+-
+set
+-
+string
+-
+vector
+-
+process.h
+/root/Desktop/Nanodegree-System-Monitor/src/process.h
 processor.h
 /root/Desktop/Nanodegree-System-Monitor/src/processor.h
 system.h
 /root/Desktop/Nanodegree-System-Monitor/src/system.h
-iostream
--
-vector
--
-string
--
+linux_parser.h
+/root/Desktop/Nanodegree-System-Monitor/src/linux_parser.h
 
