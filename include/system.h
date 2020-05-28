@@ -18,7 +18,10 @@ class System {
   std::string Kernel();               // TODO: See src/system.cpp
   std::string OperatingSystem();      // TODO: See src/system.cpp
 
-  // TODO: Define any necessary private members
+ public:
+  static std::vector<std::string> CurrCpuStats;
+  static std::vector<std::string> PrevCpuStats;
+
  private:
   Processor cpu_ = {};
   std::vector<Process> processes_ = {};
