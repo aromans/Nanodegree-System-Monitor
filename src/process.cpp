@@ -12,12 +12,14 @@ using std::string;
 using std::to_string;
 using std::vector;
 
-// TODO: Return this process's ID
+// Returns this process's ID
 int Process::Pid() { return m_Pid; }
 
 // TODO: Return this process's CPU utilization
 float Process::CpuUtilization() { 
-    return 0; 
+    float total = m_SystemCpu.GetTotal() - m_SystemCpu.GetPrevTotal();
+    m_CpuPercentage = (LinuxParser::ActiveJiffies(m_Pid) / sysconf(_SC_CLK_TCK)) / total;
+    return m_CpuPercentage; 
 }
 
 // Return the command that generated this process
@@ -34,4 +36,6 @@ long int Process::UpTime() { return LinuxParser::UpTime(m_Pid); }
 
 // TODO: Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function
-bool Process::operator<(Process const& a[[maybe_unused]]) const { return true; }
+bool Process::operator<(Process const& a) const { 
+    return a.m_CpuPercentage < m_CpuPercentage;
+}

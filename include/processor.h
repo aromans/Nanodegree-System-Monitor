@@ -5,6 +5,9 @@ class Processor {
  public:
   float Utilization();  
 
+  float GetTotal() { return m_Total; }
+  float GetPrevTotal() { return m_PrevTotal; }
+
  private:
   void CalculateCurrentCpuStats();
   void CalculatePrevCpuStats();

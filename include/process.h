@@ -2,13 +2,14 @@
 #define PROCESS_H
 
 #include <string>
+#include "processor.h"
 /*
 Basic class for Process representation
 It contains relevant attributes as shown below
 */
 class Process {
  public:
-  Process(const int& pid) : m_Pid(pid) {}
+  Process(const int& pid, const Processor& cpu) : m_Pid(pid), m_SystemCpu(cpu) {}
 
   // Getters
   int Pid();                               // TODO: See src/process.cpp
@@ -22,6 +23,8 @@ class Process {
   // TODO: Declare any necessary private members
  private:
   int m_Pid;
+  Processor m_SystemCpu;
+  float m_CpuPercentage;
 };
 
 #endif
