@@ -34,6 +34,12 @@ vector<Process>& System::Processes() {
         processes_.push_back(proc);
     }
 
+    std::sort(processes_.begin(), processes_.end(), 
+        [](const Process& a, const Process& b) -> bool 
+        {
+            return a < b;
+        });
+
     return processes_; 
 }
 

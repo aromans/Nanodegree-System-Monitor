@@ -140,7 +140,7 @@ long LinuxParser::ActiveJiffies(int pid) {
 
   long total_time = std::stol(pid_stats[13]) + std::stol(pid_stats[14]);
 
-  return total_time * sysconf(_SC_CLK_TCK);
+  return total_time / sysconf(_SC_CLK_TCK);
 }
 
 // Reads and return the number of active jiffies for the system
@@ -291,5 +291,5 @@ long LinuxParser::UpTime(int pid) {
     while(linestream >> value) pid_stats.push_back(value);
   }
   
-  return UpTime() - std::stol(pid_stats[21]);
+  return UpTime() - (std::stol(pid_stats[21]) / sysconf(_SC_CLK_TCK));
 }

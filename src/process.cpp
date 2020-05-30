@@ -15,10 +15,10 @@ using std::vector;
 // Returns this process's ID
 int Process::Pid() { return m_Pid; }
 
-// TODO: Return this process's CPU utilization
+// Returns this process's CPU utilization
 float Process::CpuUtilization() { 
     float total = m_SystemCpu.GetTotal() - m_SystemCpu.GetPrevTotal();
-    m_CpuPercentage = (LinuxParser::ActiveJiffies(m_Pid) / sysconf(_SC_CLK_TCK)) / total;
+    m_CpuPercentage = (LinuxParser::ActiveJiffies(m_Pid)) / total;
     return m_CpuPercentage; 
 }
 
@@ -34,8 +34,7 @@ string Process::User() { return LinuxParser::User(m_Pid); }
 // Return the age of this process (in seconds)
 long int Process::UpTime() { return LinuxParser::UpTime(m_Pid); }
 
-// TODO: Overload the "less than" comparison operator for Process objects
-// REMOVE: [[maybe_unused]] once you define the function
+// Overload the "less than" comparison operator for Process objects
 bool Process::operator<(Process const& a) const { 
     return a.m_CpuPercentage < m_CpuPercentage;
 }

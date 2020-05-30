@@ -12,15 +12,14 @@ class Process {
   Process(const int& pid, const Processor& cpu) : m_Pid(pid), m_SystemCpu(cpu) {}
 
   // Getters
-  int Pid();                               // TODO: See src/process.cpp
-  std::string User();                      // TODO: See src/process.cpp
-  std::string Command();                   // TODO: See src/process.cpp
-  float CpuUtilization();                  // TODO: See src/process.cpp
-  std::string Ram();                       // TODO: See src/process.cpp
-  long int UpTime();                       // TODO: See src/process.cpp
-  bool operator<(Process const& a) const;  // TODO: See src/process.cpp
+  int Pid();                               
+  std::string User();                      
+  std::string Command();                   
+  float CpuUtilization();                  
+  std::string Ram();                       
+  long int UpTime();                       
+  bool operator<(Process const& a) const;  
 
-  // TODO: Declare any necessary private members
  private:
   int m_Pid;
   Processor m_SystemCpu;
