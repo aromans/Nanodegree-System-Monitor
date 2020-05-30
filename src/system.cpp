@@ -21,8 +21,8 @@ vector<string> System::PrevCpuStats = {};
 Processor& System::Cpu() { 
     if (CurrCpuStats.size() > 0) PrevCpuStats = CurrCpuStats;
     CurrCpuStats = LinuxParser::CpuUtilization();
-    cpu_.Utilization();
-    return cpu_; 
+    m_Cpu.Utilization();
+    return m_Cpu; 
 }
 
 // Returns a container composed of the system's processes
@@ -30,17 +30,17 @@ vector<Process>& System::Processes() {
     std::vector<int> pid_lists = LinuxParser::Pids();
     
     for (const int& pid : pid_lists) {
-        Process proc(pid, cpu_);
-        processes_.push_back(proc);
+        Process proc(pid, m_Cpu);
+        m_Processes.push_back(proc);
     }
 
-    std::sort(processes_.begin(), processes_.end(), 
+    std::sort(m_Processes.begin(), m_Processes.end(), 
         [](const Process& a, const Process& b) -> bool 
         {
             return a < b;
         });
 
-    return processes_; 
+    return m_Processes; 
 }
 
 // Returns the system's kernel identifier (string)

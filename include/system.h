@@ -23,8 +23,8 @@ class System {
   static std::vector<std::string> PrevCpuStats;
 
  private:
-  Processor cpu_ = {};
-  std::vector<Process> processes_ = {};
+  Processor m_Cpu = {};
+  std::vector<Process> m_Processes = {};
 };
 
 #endif
