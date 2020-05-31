@@ -68,7 +68,7 @@ vector<int> LinuxParser::Pids() {
 }
 
 // Reads and return the system memory utilization
-float LinuxParser::MemoryUtilization() { 
+vector<float> LinuxParser::MemoryUtilization() { 
   float mem_total, mem_free, mem_cached, mem_sh, buffers, s_reclaim;
   string line;
   std::ifstream stream(kProcDirectory + kMeminfoFilename);
@@ -100,7 +100,11 @@ float LinuxParser::MemoryUtilization() {
   float total_memory_usage = mem_total - mem_free;
   float cached_memory = mem_cached + s_reclaim - mem_sh;
 
-  return (total_memory_usage - (buffers + cached_memory)) / mem_total; 
+  float mem_usage = (total_memory_usage - (buffers + cached_memory));
+
+  vector<float> mem_data = {(mem_usage / mem_total), mem_usage, buffers, cached_memory};
+
+  return mem_data; 
 }
 
 // Reads and return the system uptime
