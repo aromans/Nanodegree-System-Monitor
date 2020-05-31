@@ -28,14 +28,60 @@ std::string NCursesDisplay::ProgressBar(float percent) {
   return result + " " + display + "/100%";
 }
 
-std::string NCursesDisplay::MemoryDisplay(std::vector<float> mem_data) {
-  std::string result {"0%"};
-  float percent;
+std::string NCursesDisplay::MemoryDisplay(std::vector<float> mem_data, WINDOW* window) {
+  std::string result {"0%%"};
+  float percent = mem_data[0];
+  int size{50};
+  float bars{percent * size};
+  float green_bars{mem_data[0] * size};
+  float blue_bars{mem_data[1] * size};
+  float yellow_bars{mem_data[2] * size};
+
+  init_pair(3, COLOR_YELLOW, COLOR_BLACK);
+  init_pair(4, COLOR_GREEN, COLOR_BLACK);
+  init_pair(5, COLOR_BLUE, COLOR_BLACK);
+
+  string spacing{"   "};
+
+  wattron(window, COLOR_PAIR(1));
+  wprintw(window, result.c_str());
+  wattroff(window, COLOR_PAIR(1));
+
+  int bar_location;
+  wattron(window, COLOR_PAIR(4));
+  for (int i{0}; i < size; ++i) {
+    if (i <= green_bars) { wprintw(window, "|"); bar_location += 1; }
+  }
+  wattroff(window, COLOR_PAIR(4));
+
+  wattron(window, COLOR_PAIR(5));
+  for (int i{bar_location}; i < size; ++i) {
+    if (i <= blue_bars) { wprintw(window, "|"); bar_location += 1; }
+  }
+  wattroff(window, COLOR_PAIR(5));
+
+    wattron(window, COLOR_PAIR(3));
+  for (int i{bar_location}; i < size; ++i) {
+    if (i <= yellow_bars) { wprintw(window, "|"); bar_location += 1; }
+  }
+  wattroff(window, COLOR_PAIR(3));
+
+  // for (int i = 0; i < size; ++i) {
+  //   if (i > blue_bars && i <= yellow_bars) {
+  //     result += '|';
+  //   } else if (i > green_bars && i <= blue_bars) {
+  //     result += '|';
+  //   } else if (i <= green_bars) {
+  //     result += '|';
+  //   } else {
+  //     result += ' ';
+  //   }
+  // }
 
   string display{to_string(percent * 100).substr(0, 4)};
   if (percent < 0.1 || percent == 1.0)
     display = " " + to_string(percent * 100).substr(0, 3);
-  return result + " " + display + "/100%";
+  return spacing + " " + display + "/100%";
 }
 
 void NCursesDisplay::DisplaySystem(System& system, WINDOW* window) {
@@ -48,9 +94,15 @@ void NCursesDisplay::DisplaySystem(System& system, WINDOW* window) {
   wprintw(window, ProgressBar(system.Cpu().Utilization()).c_str());
   wattroff(window, COLOR_PAIR(1));
   mvwprintw(window, ++row, 2, "Memory: ");
+
   wattron(window, COLOR_PAIR(1));
   mvwprintw(window, row, 10, "");
-  wprintw(window, MemoryDisplay(system.MemoryUtilization()).c_str());
+  string final = MemoryDisplay(system.MemoryUtilization(), window);
+  wattroff(window, COLOR_PAIR(1));
+
+  wattron(window, COLOR_PAIR(1));
+  wprintw(window, final.c_str());
+  // wprintw(window, MemoryDisplay(system.MemoryUtilization(), window).c_str());
   wattroff(window, COLOR_PAIR(1));
   mvwprintw(window, ++row, 2,
             ("Total Processes: " + to_string(system.TotalProcesses())).c_str());

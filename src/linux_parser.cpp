@@ -102,7 +102,7 @@ vector<float> LinuxParser::MemoryUtilization() {
 
   float mem_usage = (total_memory_usage - (buffers + cached_memory));
 
-  vector<float> mem_data = {(mem_usage / mem_total), mem_usage, buffers, cached_memory};
+  vector<float> mem_data = {(mem_usage / mem_total), buffers / mem_total, cached_memory / mem_total};
 
   return mem_data; 
 }
