@@ -8,7 +8,6 @@ CMakeFiles/monitor.dir/src/linux_parser.cpp.o
  ../include/linux_parser.h
  /root/Desktop/Nanodegree-System-Monitor/src/linux_parser.cpp
 CMakeFiles/monitor.dir/src/main.cpp.o
- ../include/linux_parser.h
  ../include/ncurses_display.h
  ../include/process.h
  ../include/processor.h

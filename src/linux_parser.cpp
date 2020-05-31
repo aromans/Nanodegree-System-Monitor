@@ -114,7 +114,7 @@ long LinuxParser::UpTime() {
     std::istringstream linestream(line);
     linestream >> sys_uptime >> idle_uptime;
   }
-  return std::stol(sys_uptime) + std::stol(idle_uptime); 
+  return std::stol(sys_uptime);// + std::stol(idle_uptime); 
 }
 
 // Reads and return the number of jiffies for the system
@@ -291,5 +291,5 @@ long LinuxParser::UpTime(int pid) {
     while(linestream >> value) pid_stats.push_back(value);
   }
   
-  return UpTime() - (std::stol(pid_stats[21]) / sysconf(_SC_CLK_TCK));
+  return std::stol(pid_stats[21]) / sysconf(_SC_CLK_TCK);
 }
