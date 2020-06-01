@@ -62,7 +62,7 @@ std::string NCursesDisplay::MemoryDisplay(std::vector<float> mem_data, WINDOW* w
   string display{to_string(percent * 100).substr(0, 4)};
   if (percent < 0.1 || percent == 1.0)
     display = " " + to_string(percent * 100).substr(0, 3);
-  return spacing + " " + display + "/100%";
+  return spacing + " " + display + "/100%%";
 }
 
 void NCursesDisplay::DisplaySystem(System& system, WINDOW* window) {
