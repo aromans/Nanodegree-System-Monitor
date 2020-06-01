@@ -25,7 +25,7 @@ std::string NCursesDisplay::ProgressBar(float percent) {
   string display{to_string(percent * 100).substr(0, 4)};
   if (percent < 0.1 || percent == 1.0)
     display = " " + to_string(percent * 100).substr(0, 3);
-  return result + " " + display + "/100%";
+  return result + " " + display + "/100%%";
 }
 
 std::string NCursesDisplay::MemoryDisplay(std::vector<float> mem_data, WINDOW* window) {
@@ -78,15 +78,13 @@ void NCursesDisplay::DisplaySystem(System& system, WINDOW* window) {
 
   wattron(window, COLOR_PAIR(1));
   mvwprintw(window, row, 10, "");
-  string final = MemoryDisplay(system.MemoryUtilization(), window);
+  string final_mem = MemoryDisplay(system.MemoryUtilization(), window);
+  wattron(window, COLOR_PAIR(1));
+  wprintw(window, final_mem.c_str());
   wattroff(window, COLOR_PAIR(1));
 
-  wattron(window, COLOR_PAIR(1));
-  wprintw(window, final.c_str());
-  // wprintw(window, MemoryDisplay(system.MemoryUtilization(), window).c_str());
-  wattroff(window, COLOR_PAIR(1));
   mvwprintw(window, ++row, 2,
-            ("Total Processes: " + to_string(system.TotalProcesses())).c_str());
+      ("Total Processes: " + to_string(system.TotalProcesses())).c_str());
   mvwprintw(
       window, ++row, 2,
       ("Running Processes: " + to_string(system.RunningProcesses())).c_str());
