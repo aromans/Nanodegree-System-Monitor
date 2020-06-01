@@ -29,54 +29,35 @@ std::string NCursesDisplay::ProgressBar(float percent) {
 }
 
 std::string NCursesDisplay::MemoryDisplay(std::vector<float> mem_data, WINDOW* window) {
-  std::string result {"0%%"};
-  float percent = mem_data[0];
   int size{50};
-  float bars{percent * size};
-  float green_bars{mem_data[0] * size};
-  float blue_bars{mem_data[1] * size};
-  float yellow_bars{mem_data[2] * size};
+  float percent = mem_data[0];           // Total Memory Usage 
+  float green_bars{mem_data[1] * size};  // Non Cache or Buffers Memory
+  float blue_bars{mem_data[2] * size};   // Buffer Memory
+  float yellow_bars{mem_data[3] * size}; // Cached Memory
 
-  init_pair(3, COLOR_YELLOW, COLOR_BLACK);
-  init_pair(4, COLOR_GREEN, COLOR_BLACK);
-  init_pair(5, COLOR_BLUE, COLOR_BLACK);
-
-  string spacing{"   "};
+  string spacing{""};
 
   wattron(window, COLOR_PAIR(1));
-  wprintw(window, result.c_str());
+  wprintw(window, "0%%");
   wattroff(window, COLOR_PAIR(1));
 
-  int bar_location;
-  wattron(window, COLOR_PAIR(4));
   for (int i{0}; i < size; ++i) {
-    if (i <= green_bars) { wprintw(window, "|"); bar_location += 1; }
+    if (i <= green_bars) { 
+      wattron(window, COLOR_PAIR(2));
+      wprintw(window, "|");
+      wattroff(window, COLOR_PAIR(2));
+    } else if (i > green_bars && i <= (green_bars + blue_bars)) { 
+      wattron(window, COLOR_PAIR(1));
+      wprintw(window, "|");
+      wattroff(window, COLOR_PAIR(1));
+    } else if (i > (green_bars + blue_bars) && i <= (green_bars + blue_bars + yellow_bars)) { 
+      wattron(window, COLOR_PAIR(3));
+      wprintw(window, "|");
+      wattroff(window, COLOR_PAIR(3));
+    } else {
+      spacing += " ";
+    }
   }
-  wattroff(window, COLOR_PAIR(4));
-
-  wattron(window, COLOR_PAIR(5));
-  for (int i{bar_location}; i < size; ++i) {
-    if (i <= blue_bars) { wprintw(window, "|"); bar_location += 1; }
-  }
-  wattroff(window, COLOR_PAIR(5));
-
-    wattron(window, COLOR_PAIR(3));
-  for (int i{bar_location}; i < size; ++i) {
-    if (i <= yellow_bars) { wprintw(window, "|"); bar_location += 1; }
-  }
-  wattroff(window, COLOR_PAIR(3));
-
-  // for (int i = 0; i < size; ++i) {
-  //   if (i > blue_bars && i <= yellow_bars) {
-  //     result += '|';
-  //   } else if (i > green_bars && i <= blue_bars) {
-  //     result += '|';
-  //   } else if (i <= green_bars) {
-  //     result += '|';
-  //   } else {
-  //     result += ' ';
-  //   }
-  // }
 
   string display{to_string(percent * 100).substr(0, 4)};
   if (percent < 0.1 || percent == 1.0)
@@ -158,6 +139,7 @@ void NCursesDisplay::Display(System& system, int n) {
   while (1) {
     init_pair(1, COLOR_BLUE, COLOR_BLACK);
     init_pair(2, COLOR_GREEN, COLOR_BLACK);
+    init_pair(3, COLOR_YELLOW, COLOR_BLACK);
     box(system_window, 0, 0);
     box(process_window, 0, 0);
     DisplaySystem(system, system_window);
