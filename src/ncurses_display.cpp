@@ -28,7 +28,7 @@ std::string NCursesDisplay::ProgressBar(float percent) {
   return result + " " + display + "/100%%";
 }
 
-std::string NCursesDisplay::MemoryDisplay(std::vector<float> mem_data, WINDOW* window) {
+std::string NCursesDisplay::MemoryDisplay(const std::vector<float>& mem_data, WINDOW* window) {
   int size{50};
   float percent = mem_data[0];           // Total Memory Usage 
   float green_bars{mem_data[1] * size};  // Non Cache or Buffers Memory
@@ -93,7 +93,7 @@ void NCursesDisplay::DisplaySystem(System& system, WINDOW* window) {
   wrefresh(window);
 }
 
-void NCursesDisplay::DisplayProcesses(std::vector<Process>& processes,
+void NCursesDisplay::DisplayProcesses(const std::vector<Process>& processes,
                                       WINDOW* window, int n) {
   int row{0};
   int const pid_column{2};
